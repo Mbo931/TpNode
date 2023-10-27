@@ -21,9 +21,7 @@ const students = [
     { name : "Sophie", birth : "2001-10-02"},
     { name : "Bernard", birth : "1980-21-08"}
 ];
-students.forEach(student => {
-  student.formattedBirth = dayjs(student.birth).format('D MMMM YYYY');
-});
+
 
 const server = http.createServer((req, res) => {
     if (req.url === '/favicon.ico') {
@@ -33,7 +31,7 @@ const server = http.createServer((req, res) => {
     }
 
     if (req.method === 'GET' && req.url === '/style.css') {
-        const css = readFileSync('./assets/css/style.css', 'utf8');
+        const css = readFileSync('../assets/css/style.css', 'utf8');
         res.writeHead(200, { 'Content-type': 'text/css' });
         res.end(css);
         return;
@@ -45,26 +43,28 @@ const server = http.createServer((req, res) => {
         res.end(html);
         return;
     } else if (req.url === '/' && req.method === 'POST') {
-        let body = '';
-        req.on('data', chunk => {
-            body += chunk.toString();
-        });
-        req.on('end', () => {
-            console.log('Body:', body);
-            const parsedBody = querystring.parse(body);
-            console.log('Parsed Body:', parsedBody);
-            if (!parsedBody.name || !parsedBody.birth) {
-                const html = pug.renderFile('./view/homeTemplate.pug', { errors: 'Tous les champs doivent être remplis' });
-                res.writeHead(400, { 'Content-Type': 'text/html' });
-                res.end(html);
-                return;
-            }
+    let body = '';
+    req.on('data', chunk => {
+        body += chunk.toString();
+    });
+    req.on('end', () => {
+        console.log('Body:', body);
+        const parsedBody = querystring.parse(body);
+        console.log('Parsed Body:', parsedBody);
+        if (!parsedBody.name || !parsedBody.birth) {
+            const html = pug.renderFile('./view/homeTemplate.pug', { errors: 'Tous les champs doivent être remplis' });
+            res.writeHead(400, { 'Content-Type': 'text/html' });
+            res.end(html);
+            return;
+        }
 
-            students.push({ name: parsedBody.name, birth: parsedBody.birth });
-            res.writeHead(302, { 'Location': '/users' });
-            res.end();
-        });
-    } else if (req.url === '/users' && req.method === 'GET') {
+        students.push({ name: parsedBody.name, birth: parsedBody.birth });
+        console.log(students)
+        res.writeHead(302, { 'Location': '/users' });
+        res.end();
+    });
+}
+ else if (req.url === '/users' && req.method === 'GET') {
         const html = pug.renderFile('./view/usersTemplate.pug', { students });
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end(html);
@@ -82,6 +82,7 @@ else {
         res.end('<h1>404 - Page Not Found</h1>');
     }
 });
+
 server.listen(PORT, HOST, () => {
   console.log(`Server running at http://${HOST}:${PORT}/`);
 });
