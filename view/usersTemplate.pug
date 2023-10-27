@@ -3,17 +3,15 @@ extends layout.pug
 
 
 
-
-
-
 block content
     ul
         each student in students
-            li= student.name + ' - ' + student.birth + ' y'
+            li #{student.name}  #{student.birth} 
+                button() X
+
+        
 
 
 
 
-block footer
-  footer
-    p &copy;   TP Node
+

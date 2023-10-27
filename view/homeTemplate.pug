@@ -5,14 +5,12 @@ extends layout.pug
 
 block content
   h1 Bienvenue !
-  a(href="/users") Voir les utilisateurs
-  form(action="/addStudent" method="post")
+  a(href="/") Voir les utilisateurs
+  form(action="/" method="post")
     label(for="name") Prénom
     input(type="text" name="name" id="name")
     label(for="birthdate") Date de naissance
     input(type="date" name="birthdate" id="birthdate")
     button(type="submit") Valider
 
-block footer
-  footer
-    p &copy;   TP Node 
+
