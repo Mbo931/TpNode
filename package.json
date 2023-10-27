@@ -11,4 +11,10 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.3.1",
+    "pug": "^3.0.2"
+  }
 }
