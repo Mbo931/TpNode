@@ -1,17 +1,11 @@
 extends layout.pug
 
-
-
-
 block content
     ul
-        each student in students
-            li #{student.name}  #{student.birth} 
-                button() X
-
-        
-
-
-
+        each student, index in students
+            li
+                span #{student.name} #{student.formattedBirth}
+                form(action="/delete-student/" + index, method="post", style="display:inline;")
+                    button(type="submit") X
 
 

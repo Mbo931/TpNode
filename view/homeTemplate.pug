@@ -9,8 +9,9 @@ block content
   form(action="/" method="post")
     label(for="name") Prénom
     input(type="text" name="name" id="name")
-    label(for="birthdate") Date de naissance
-    input(type="date" name="birthdate" id="birthdate")
+    label(for="birth") Date de naissance
+    input(type="date" name="birth" id="birth")
     button(type="submit") Valider
-
+    if errors
+      p.error= errors
 

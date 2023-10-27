@@ -53,7 +53,14 @@ const server = http.createServer((req, res) => {
             console.log('Body:', body);
             const parsedBody = querystring.parse(body);
             console.log('Parsed Body:', parsedBody);
-            students.push({ name: parsedBody.name, birth: parsedBody.birthdate });
+            if (!parsedBody.name || !parsedBody.birth) {
+                const html = pug.renderFile('./view/homeTemplate.pug', { errors: 'Tous les champs doivent être remplis' });
+                res.writeHead(400, { 'Content-Type': 'text/html' });
+                res.end(html);
+                return;
+            }
+
+            students.push({ name: parsedBody.name, birth: parsedBody.birth });
             res.writeHead(302, { 'Location': '/users' });
             res.end();
         });
@@ -61,7 +68,16 @@ const server = http.createServer((req, res) => {
         const html = pug.renderFile('./view/usersTemplate.pug', { students });
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end(html);
-    } else {
+    } else if (req.url.startsWith('/delete-student/') && req.method === 'POST') {
+  const index = parseInt(req.url.split('/')[2]);
+  if (!isNaN(index) && index >= 0 && index < students.length) {
+    students.splice(index, 1);
+  }
+  res.writeHead(302, { 'Location': '/users' });
+  res.end();
+  return;
+}
+else {
         res.writeHead(404, { 'Content-type': 'text/html' });
         res.end('<h1>404 - Page Not Found</h1>');
     }
